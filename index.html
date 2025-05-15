@@ -6,6 +6,12 @@
   <title>Cardápio Digital - Hamburgueria La Brasa</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#B91C1C">
+<!-- Suporte para iOS -->
+<link rel="apple-touch-icon" href="icons/icon512.png">
+<meta name="apple-mobile-web-app-status-bar" content="#B91C1C">
+
 </head>
 
 <body class="bg-black font-sans text-white">
@@ -297,6 +303,17 @@
   </div>
 </div>
 
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('Service Worker registrado com sucesso:', registration);
+      })
+      .catch(error => {
+        console.log('Falha ao registrar o Service Worker:', error);
+      });
+  }
+</script>
 
 </body>
 </html>

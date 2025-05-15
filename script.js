@@ -215,3 +215,14 @@ function adicionarSuco() {
   adicionarAoCarrinho(`Suco Natural (${selecionado})`, 10.00);
   toggleSucoModal();
 }
+
+// Salvar
+localStorage.setItem('carrinho', JSON.stringify(carrinho));
+
+// Recuperar ao carregar
+const carrinhoSalvo = JSON.parse(localStorage.getItem('carrinho'));
+if (carrinhoSalvo) {
+  carrinho = carrinhoSalvo;
+  atualizarCarrinho();
+}
+
