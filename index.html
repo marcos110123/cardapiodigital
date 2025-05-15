@@ -53,14 +53,74 @@
         <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Cheese Bacon', 32.00)">Adicionar ao Carrinho</button>
       </div>
       <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
-        <img src="img/hamburguer1.jpeg" alt="Veggie" class="w-full h-48 object-cover rounded-md">
+        <img src="img/lanche3.jpeg" alt="Veggie" class="w-full h-48 object-cover rounded-md">
         <h3 class="text-xl font-semibold mt-4">Veggie</h3>
         <p class="text-gray-300">Hambúrguer de grão-de-bico, rúcula, tomate seco, molho especial.</p>
         <p class="text-red-500 font-bold mt-2">R$ 28,00</p>
         <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Veggie', 28.00)">Adicionar ao Carrinho</button>
       </div>
+     <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+  <img src="img/monte.jpeg" alt="Monte seu Lanche" class="w-full h-48 object-cover rounded-md">
+  <h3 class="text-xl font-semibold mt-4">Monte seu Lanche</h3>
+  <p class="text-gray-300">Personalize seu hambúrguer com os ingredientes de sua escolha.</p>
+  <p class="text-red-500 font-bold mt-2">A partir de R$ 20,00</p>
+  <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleCustomBurgerForm()">Montar seu Lanche</button>
+</div>
+
+      </div>
+      <div id="customBurgerForm" class="hidden bg-gray-800 p-6 mt-6 rounded-lg shadow-lg text-white max-w-4xl mx-auto">
+  <h3 class="text-2xl font-bold mb-6 text-center">Monte seu Hambúrguer</h3>
+  <form id="customBurgerBuilder" class="space-y-6">
+    
+    <!-- Tipo de Hambúrguer -->
+    <div>
+      <label class="block font-semibold mb-2">Tipo de Hambúrguer:</label>
+      <select id="burgerType" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
+        <option value="beef|15.00">Hambúrguer Bovino (150g) - R$ 15,00</option>
+        <option value="chicken|12.00">Hambúrguer de Frango (150g) - R$ 12,00</option>
+        <option value="veggie|14.00">Hambúrguer Vegetariano - R$ 14,00</option>
+      </select>
     </div>
-  </section>
+
+    <!-- Ingredientes -->
+    <div>
+      <label class="block font-semibold mb-2">Ingredientes (selecione até 5):</label>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+        <label><input type="checkbox" name="toppings" value="lettuce|1.00" class="mr-2">Alface - R$ 1,00</label>
+        <label><input type="checkbox" name="toppings" value="tomato|1.00" class="mr-2">Tomate - R$ 1,00</label>
+        <label><input type="checkbox" name="toppings" value="cheddar|3.00" class="mr-2">Cheddar - R$ 3,00</label>
+        <label><input type="checkbox" name="toppings" value="bacon|4.00" class="mr-2">Bacon - R$ 4,00</label>
+        <label><input type="checkbox" name="toppings" value="onion|2.00" class="mr-2">Cebola Caramelizada - R$ 2,00</label>
+        <label><input type="checkbox" name="toppings" value="pickle|1.50" class="mr-2">Picles - R$ 1,50</label>
+      </div>
+    </div>
+
+    <!-- Molho -->
+    <div>
+      <label class="block font-semibold mb-2">Molho:</label>
+      <select id="sauce" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
+        <option value="maionese|0.00">Maionese - Grátis</option>
+        <option value="barbecue|2.00">Barbecue - R$ 2,00</option>
+        <option value="spicy|2.00">Picante - R$ 2,00</option>
+      </select>
+    </div>
+
+    <!-- Pão -->
+    <div>
+      <label class="block font-semibold mb-2">Pão:</label>
+      <select id="bread" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
+        <option value="brioche|5.00">Pão Brioche - R$ 5,00</option>
+        <option value="australiano|6.00">Pão Australiano - R$ 6,00</option>
+      </select>
+    </div>
+
+    <!-- Botão -->
+    <div class="text-center">
+      <button type="button" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700" onclick="addCustomBurger()">Adicionar ao Carrinho</button>
+    </div>
+  </form>
+</div>
+
 
   <!-- Seção Acompanhamentos -->
   <section id="acompanhamentos" class="py-10 px-4 bg-black">
@@ -81,47 +141,54 @@
         <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Onion Rings', 18.00)">Adicionar ao Carrinho</button>
       </div>
       <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
-        <img src="img/onion.jpeg" alt="Onion Rings" class="w-full h-48 object-cover rounded-md">
-        <h3 class="text-xl font-semibold mt-4">Onion Rings</h3>
-        <p class="text-gray-300">Anéis de cebola empanados e fritos (150g).</p>
+        <img src="img/batata3.jpeg" alt="Batata c/ cheddar e bacon" class="w-full h-48 object-cover rounded-md">
+        <h3 class="text-xl font-semibold mt-4">Batata com cheddar e bacon</h3>
+        <p class="text-gray-300">Batata com cheddar e bacon (150g).</p>
         <p class="text-red-500 font-bold mt-2">R$ 18,00</p>
         <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Onion Rings', 18.00)">Adicionar ao Carrinho</button>
       </div>
     </div>
   </section>
+    </div>
+    
+  </section>
+ 
+   
 
   <!-- Seção Bebidas -->
   <section id="bebidas" class="py-10 px-4 bg-gray-900">
     <h2 class="text-3xl font-bold text-center mb-6">Bebidas</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
-        <img src="img/Lata.jpeg" alt="Refrigerante" class="w-full h-48 object-cover rounded-md">
-        <h3 class="text-xl font-semibold mt-4">Refrigerante</h3>
-        <p class="text-gray-300">Lata de 350ml (Coca-Cola, Guaraná, Sprite).</p>
-        <p class="text-red-500 font-bold mt-2">R$ 7,00</p>
-        <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Refrigerante', 7.00)">Adicionar ao Carrinho</button>
-      </div>
-      <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
-        <img src="img/suco.jpeg" alt="Suco Natural" class="w-full h-48 object-cover rounded-md">
-        <h3 class="text-xl font-semibold mt-4">Suco Natural</h3>
-        <p class="text-gray-300">Copo de 300ml (laranja, limão, abacaxi).</p>
-        <p class="text-red-500 font-bold mt-2">R$ 10,00</p>
-        <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Suco Natural', 10.00)">Adicionar ao Carrinho</button>
-      </div>
-    </div>
+     <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+  <img src="img/Lata.jpeg" alt="Refrigerante" class="w-full h-48 object-cover rounded-md">
+  <h3 class="text-xl font-semibold mt-4">Refrigerante</h3>
+  <p class="text-gray-300">Lata de 350ml (escolha o sabor).</p>
+  <p class="text-red-500 font-bold mt-2">R$ 7,00</p>
+  <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleBebidaModal()">Escolher Sabor</button>
+</div>
+
+    <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+  <img src="img/suco.jpeg" alt="Suco Natural" class="w-full h-48 object-cover rounded-md">
+  <h3 class="text-xl font-semibold mt-4">Suco Natural</h3>
+  <p class="text-gray-300">Copo de 300ml (laranja, limão, abacaxi).</p>
+  <p class="text-red-500 font-bold mt-2">R$ 10,00</p>
+  <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleSucoModal()">Escolher Sabor</button>
+</div>
+
   </section>
 
   <!-- Seção Sobremesas -->
   <section id="sobremesas" class="py-10 px-4 bg-black">
     <h2 class="text-3xl font-bold text-center mb-6">Sobremesas</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
-        <img src="img/milk.jpeg" alt="Milkshake" class="w-full h-48 object-cover rounded-md">
-        <h3 class="text-xl font-semibold mt-4">Milkshake</h3>
-        <p class="text-gray-300">Copo de 400ml (chocolate, morango, baunilha).</p>
-        <p class="text-red-500 font-bold mt-2">R$ 20,00</p>
-        <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Milkshake', 20.00)">Adicionar ao Carrinho</button>
-      </div>
+     <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+  <img src="img/milk.jpeg" alt="Milkshake" class="w-full h-48 object-cover rounded-md">
+  <h3 class="text-xl font-semibold mt-4">Milkshake</h3>
+  <p class="text-gray-300">Copo de 400ml (chocolate, morango, baunilha).</p>
+  <p class="text-red-500 font-bold mt-2">R$ 20,00</p>
+  <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleMilkshakeModal()">Escolher Sabor</button>
+</div>
+
       <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
         <img src="img/brownie.jpeg" alt="Brownie" class="w-full h-48 object-cover rounded-md">
         <h3 class="text-xl font-semibold mt-4">Brownie</h3>
@@ -178,5 +245,58 @@
     <p>Contato: (11) 1234-5678 | contato@labrasa.com.br</p>
   </footer>
   <script src="script.js"></script>
+
+  <div id="modalBebida" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
+  <div class="bg-gray-800 text-white rounded-lg p-6 w-full max-w-md shadow-lg">
+    <h2 class="text-xl font-bold mb-4 text-center">Escolha seu Refrigerante</h2>
+    <form id="formBebida" class="space-y-4">
+      <label class="block">
+        <input type="radio" name="saborBebida" value="Coca-Cola" class="mr-2"> Coca-Cola
+      </label>
+      <label class="block">
+        <input type="radio" name="saborBebida" value="Guaraná" class="mr-2"> Guaraná
+      </label>
+      <label class="block">
+        <input type="radio" name="saborBebida" value="Sprite" class="mr-2"> Sprite
+      </label>
+      <div class="flex justify-end mt-6 space-x-3">
+        <button type="button" onclick="toggleBebidaModal()" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700">Cancelar</button>
+        <button type="button" onclick="adicionarBebida()" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700">Adicionar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="modalSuco" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
+  <div class="bg-gray-800 text-white rounded-lg p-6 w-full max-w-md shadow-lg">
+    <h2 class="text-xl font-bold mb-4 text-center">Escolha seu Suco</h2>
+    <form class="space-y-4">
+      <label class="block"><input type="radio" name="saborSuco" value="Laranja" class="mr-2"> Laranja</label>
+      <label class="block"><input type="radio" name="saborSuco" value="Limão" class="mr-2"> Limão</label>
+      <label class="block"><input type="radio" name="saborSuco" value="Abacaxi" class="mr-2"> Abacaxi</label>
+      <div class="flex justify-end mt-6 space-x-3">
+        <button type="button" onclick="toggleSucoModal()" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700">Cancelar</button>
+        <button type="button" onclick="adicionarSuco()" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700">Adicionar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="modalMilkshake" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
+  <div class="bg-gray-800 text-white rounded-lg p-6 w-full max-w-md shadow-lg">
+    <h2 class="text-xl font-bold mb-4 text-center">Escolha seu Milkshake</h2>
+    <form class="space-y-4">
+      <label class="block"><input type="radio" name="saborMilkshake" value="Chocolate" class="mr-2"> Chocolate</label>
+      <label class="block"><input type="radio" name="saborMilkshake" value="Morango" class="mr-2"> Morango</label>
+      <label class="block"><input type="radio" name="saborMilkshake" value="Baunilha" class="mr-2"> Baunilha</label>
+      <div class="flex justify-end mt-6 space-x-3">
+        <button type="button" onclick="toggleMilkshakeModal()" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700">Cancelar</button>
+        <button type="button" onclick="adicionarMilkshake()" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700">Adicionar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
 </body>
 </html>

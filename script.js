@@ -19,6 +19,7 @@ function adicionarAoCarrinho(nome, preco) {
 
   total += preco;
   atualizarCarrinho();
+  exibirNotificacao(nome); // Chama a notificação com o nome do item
 }
 
 function removerDoCarrinho(index) {
@@ -103,3 +104,114 @@ document.getElementById('orderForm').addEventListener('submit', function(event) 
   atualizarCarrinho();
 });
 
+// Função para exibir notificação de item adicionado
+function exibirNotificacao(nome) {
+  // Cria o elemento da notificação
+  const notificacao = document.createElement('div');
+  notificacao.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50';
+  notificacao.textContent = `${nome} adicionado ao carrinho!`;
+
+  // Adiciona a notificação ao body
+  document.body.appendChild(notificacao);
+
+  // Remove a notificação após 3 segundos
+  setTimeout(() => {
+    notificacao.remove();
+  }, 3000);
+}
+
+function toggleCustomBurgerForm() {
+  const form = document.getElementById('customBurgerForm');
+  form.classList.toggle('hidden');
+}
+
+function addCustomBurger() {
+  const burgerType = document.getElementById('burgerType').value.split('|');
+  const toppings = Array.from(document.querySelectorAll('input[name="toppings"]:checked')).map(input => input.value.split('|'));
+  const sauce = document.getElementById('sauce').value.split('|');
+  const bread = document.getElementById('bread').value.split('|');
+
+  if (toppings.length > 5) {
+    alert('Por favor, selecione no máximo 5 ingredientes!');
+    return;
+  }
+
+  let preco = parseFloat(burgerType[1]) + parseFloat(sauce[1]) + parseFloat(bread[1]);
+  const ingredientes = [burgerType[0], sauce[0], bread[0]];
+  toppings.forEach(topping => {
+    preco += parseFloat(topping[1]);
+    ingredientes.push(topping[0]);
+  });
+
+  const nome = `Hambúrguer Personalizado (${ingredientes.join(', ')})`;
+  adicionarAoCarrinho(nome, preco);
+  toggleCustomBurgerForm();
+}
+function toggleBebidaModal() {
+  const modal = document.getElementById('modalBebida');
+  modal.classList.toggle('hidden');
+}
+
+function adicionarBebida() {
+  const sabores = document.getElementsByName('saborBebida');
+  let selecionado = null;
+  for (const sabor of sabores) {
+    if (sabor.checked) {
+      selecionado = sabor.value;
+      break;
+    }
+  }
+
+  if (!selecionado) {
+    alert("Por favor, selecione um sabor de refrigerante.");
+    return;
+  }
+
+  adicionarAoCarrinho(`Refrigerante (${selecionado})`, 7.00);
+  toggleBebidaModal();
+}
+function toggleMilkshakeModal() {
+  document.getElementById('modalMilkshake').classList.toggle('hidden');
+}
+
+function adicionarMilkshake() {
+  const sabores = document.getElementsByName('saborMilkshake');
+  let selecionado = null;
+  for (const s of sabores) {
+    if (s.checked) {
+      selecionado = s.value;
+      break;
+    }
+  }
+
+  if (!selecionado) {
+    alert("Selecione um sabor de milkshake.");
+    return;
+  }
+
+  adicionarAoCarrinho(`Milkshake (${selecionado})`, 20.00);
+  toggleMilkshakeModal();
+}
+
+function toggleSucoModal() {
+  document.getElementById('modalSuco').classList.toggle('hidden');
+}
+
+function adicionarSuco() {
+  const sabores = document.getElementsByName('saborSuco');
+  let selecionado = null;
+  for (const s of sabores) {
+    if (s.checked) {
+      selecionado = s.value;
+      break;
+    }
+  }
+
+  if (!selecionado) {
+    alert("Selecione um sabor de suco.");
+    return;
+  }
+
+  adicionarAoCarrinho(`Suco Natural (${selecionado})`, 10.00);
+  toggleSucoModal();
+}
