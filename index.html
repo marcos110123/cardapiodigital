@@ -7,46 +7,41 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#B91C1C">
-<!-- Suporte para iOS -->
-<link rel="apple-touch-icon" href="icons/icon512.png">
-<meta name="apple-mobile-web-app-status-bar" content="#B91C1C">
-
+  <meta name="theme-color" content="#B91C1C">
+  <!-- Suporte para iOS -->
+  <link rel="apple-touch-icon" href="icons/icon512.png">
+  <meta name="apple-mobile-web-app-status-bar" content="#B91C1C">
 </head>
 
 <body class="bg-black font-sans text-white">
   <!-- Cabeçalho -->
- <!-- Cabeçalho -->
-<header class="bg-gradient-to-r from-gray-900 to-black text-white text-center py-8 shadow-lg">
+  <header class="bg-gradient-to-r from-gray-900 to-black text-white text-center py-8 shadow-lg">
     <div class="max-w-6xl mx-auto flex items-center justify-center flex-col">
-      <!-- Placeholder para o logo -->
       <img src="img/logo.jpeg.jpg" alt="Logo Hamburgueria La Brasa" class="h-60 mb-4">
-      <h1 class="text-5xl font-extrabold tracking-tight" style="font-family: 'Roboto', sans-serif;"></h1>
+      <h1 class="text-5xl font-extrabold tracking-tight" style="font-family: 'Roboto', sans-serif;">Hamburgueria La Brasa</h1>
       <p class="text-xl mt-3 text-gray-300 animate-pulse">Os melhores hambúrgueres da cidade!</p>
     </div>
   </header>
 
   <!-- Navegação -->
- <!-- Navegação -->
-<nav class="bg-black text-white py-4">
-  <ul class="flex flex-wrap justify-center gap-4 sm:gap-6">
-    <li><a href="#hamburgueres" class="hover:text-red-500">Hambúrgueres</a></li>
-    <li><a href="#acompanhamentos" class="hover:text-red-500">Acompanhamentos</a></li>
-    <li><a href="#bebidas" class="hover:text-red-500">Bebidas</a></li>
-    <li><a href="#sobremesas" class="hover:text-red-500">Sobremesas</a></li>
-  </ul>
-</nav>
+  <nav class="bg-black text-white py-4">
+    <ul class="flex flex-wrap justify-center gap-4 sm:gap-6">
+      <li><a href="#hamburgueres" class="hover:text-red-500">Hambúrgueres</a></li>
+      <li><a href="#acompanhamentos" class="hover:text-red-500">Acompanhamentos</a></li>
+      <li><a href="#bebidas" class="hover:text-red-500">Bebidas</a></li>
+      <li><a href="#sobremesas" class="hover:text-red-500">Sobremesas</a></li>
+    </ul>
+  </nav>
+
+  <!-- Botão de Instalação -->
+  <button id="install-button" style="display: none; position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    Instalar App
+  </button>
 
   <!-- Seção Hambúrgueres -->
-   <button id="install-button" style="display: none; position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-  Instalar App
-</button>
-
   <section id="hamburgueres" class="py-10 px-4 bg-gray-900">
-    
     <h2 class="text-3xl font-bold text-center mb-6">Hambúrgueres</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      <!-- Item do Cardápio -->
       <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
         <img src="img/hamburguer1.jpeg" alt="Hambúrguer Clássico" class="w-full h-48 object-cover rounded-md">
         <h3 class="text-xl font-semibold mt-4">Clássico</h3>
@@ -68,68 +63,59 @@
         <p class="text-red-500 font-bold mt-2">R$ 28,00</p>
         <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Veggie', 28.00)">Adicionar ao Carrinho</button>
       </div>
-     <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
-  <img src="img/monte.jpeg" alt="Monte seu Lanche" class="w-full h-48 object-cover rounded-md">
-  <h3 class="text-xl font-semibold mt-4">Monte seu Lanche</h3>
-  <p class="text-gray-300">Personalize seu hambúrguer com os ingredientes de sua escolha.</p>
-  <p class="text-red-500 font-bold mt-2">A partir de R$ 20,00</p>
-  <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleCustomBurgerForm()">Montar seu Lanche</button>
-</div>
-
-      </div>
-      <div id="customBurgerForm" class="hidden bg-gray-800 p-6 mt-6 rounded-lg shadow-lg text-white max-w-4xl mx-auto">
-  <h3 class="text-2xl font-bold mb-6 text-center">Monte seu Hambúrguer</h3>
-  <form id="customBurgerBuilder" class="space-y-6">
-    
-    <!-- Tipo de Hambúrguer -->
-    <div>
-      <label class="block font-semibold mb-2">Tipo de Hambúrguer:</label>
-      <select id="burgerType" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
-        <option value="beef|15.00">Hambúrguer Bovino (150g) - R$ 15,00</option>
-        <option value="chicken|12.00">Hambúrguer de Frango (150g) - R$ 12,00</option>
-        <option value="veggie|14.00">Hambúrguer Vegetariano - R$ 14,00</option>
-      </select>
-    </div>
-
-    <!-- Ingredientes -->
-    <div>
-      <label class="block font-semibold mb-2">Ingredientes (selecione até 5):</label>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-        <label><input type="checkbox" name="toppings" value="lettuce|1.00" class="mr-2">Alface - R$ 1,00</label>
-        <label><input type="checkbox" name="toppings" value="tomato|1.00" class="mr-2">Tomate - R$ 1,00</label>
-        <label><input type="checkbox" name="toppings" value="cheddar|3.00" class="mr-2">Cheddar - R$ 3,00</label>
-        <label><input type="checkbox" name="toppings" value="bacon|4.00" class="mr-2">Bacon - R$ 4,00</label>
-        <label><input type="checkbox" name="toppings" value="onion|2.00" class="mr-2">Cebola Caramelizada - R$ 2,00</label>
-        <label><input type="checkbox" name="toppings" value="pickle|1.50" class="mr-2">Picles - R$ 1,50</label>
+      <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+        <img src="img/monte.jpeg" alt="Monte seu Lanche" class="w-full h-48 object-cover rounded-md">
+        <h3 class="text-xl font-semibold mt-4">Monte seu Lanche</h3>
+        <p class="text-gray-300">Personalize seu hambúrguer com os ingredientes de sua escolha.</p>
+        <p class="text-red-500 font-bold mt-2">A partir de R$ 20,00</p>
+        <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleCustomBurgerForm()">Montar seu Lanche</button>
       </div>
     </div>
 
-    <!-- Molho -->
-    <div>
-      <label class="block font-semibold mb-2">Molho:</label>
-      <select id="sauce" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
-        <option value="maionese|0.00">Maionese - Grátis</option>
-        <option value="barbecue|2.00">Barbecue - R$ 2,00</option>
-        <option value="spicy|2.00">Picante - R$ 2,00</option>
-      </select>
+    <!-- Formulário de Hambúrguer Personalizado -->
+    <div id="customBurgerForm" class="hidden bg-gray-800 p-6 mt-6 rounded-lg shadow-lg text-white max-w-4xl mx-auto">
+      <h3 class="text-2xl font-bold mb-6 text-center">Monte seu Hambúrguer</h3>
+      <form id="customBurgerBuilder" class="space-y-6">
+        <div>
+          <label class="block font-semibold mb-2">Tipo de Hambúrguer:</label>
+          <select id="burgerType" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
+            <option value="beef|15.00">Hambúrguer Bovino (150g) - R$ 15,00</option>
+            <option value="chicken|12.00">Hambúrguer de Frango (150g) - R$ 12,00</option>
+            <option value="veggie|14.00">Hambúrguer Vegetariano - R$ 14,00</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">Ingredientes (selecione até 5):</label>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <label><input type="checkbox" name="toppings" value="lettuce|1.00" class="mr-2">Alface - R$ 1,00</label>
+            <label><input type="checkbox" name="toppings" value="tomato|1.00" class="mr-2">Tomate - R$ 1,00</label>
+            <label><input type="checkbox" name="toppings" value="cheddar|3.00" class="mr-2">Cheddar - R$ 3,00</label>
+            <label><input type="checkbox" name="toppings" value="bacon|4.00" class="mr-2">Bacon - R$ 4,00</label>
+            <label><input type="checkbox" name="toppings" value="onion|2.00" class="mr-2">Cebola Caramelizada - R$ 2,00</label>
+            <label><input type="checkbox" name="toppings" value="pickle|1.50" class="mr-2">Picles - R$ 1,50</label>
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">Molho:</label>
+          <select id="sauce" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
+            <option value="maionese|0.00">Maionese - Grátis</option>
+            <option value="barbecue|2.00">Barbecue - R$ 2,00</option>
+            <option value="spicy|2.00">Picante - R$ 2,00</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">Pão:</label>
+          <select id="bread" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
+            <option value="brioche|5.00">Pão Brioche - R$ 5,00</option>
+            <option value="australiano|6.00">Pão Australiano - R$ 6,00</option>
+          </select>
+        </div>
+        <div class="text-center">
+          <button type="button" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700" onclick="addCustomBurger()">Adicionar ao Carrinho</button>
+        </div>
+      </form>
     </div>
-
-    <!-- Pão -->
-    <div>
-      <label class="block font-semibold mb-2">Pão:</label>
-      <select id="bread" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
-        <option value="brioche|5.00">Pão Brioche - R$ 5,00</option>
-        <option value="australiano|6.00">Pão Australiano - R$ 6,00</option>
-      </select>
-    </div>
-
-    <!-- Botão -->
-    <div class="text-center">
-      <button type="button" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700" onclick="addCustomBurger()">Adicionar ao Carrinho</button>
-    </div>
-  </form>
-</div>
-
+  </section>
 
   <!-- Seção Acompanhamentos -->
   <section id="acompanhamentos" class="py-10 px-4 bg-black">
@@ -150,54 +136,47 @@
         <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Onion Rings', 18.00)">Adicionar ao Carrinho</button>
       </div>
       <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
-        <img src="img/batata3.jpeg" alt="Batata c/ cheddar e bacon" class="w-full h-48 object-cover rounded-md">
-        <h3 class="text-xl font-semibold mt-4">Batata com cheddar e bacon</h3>
+        <img src="img/batata3.jpeg" alt="Batata com Cheddar e Bacon" class="w-full h-48 object-cover rounded-md">
+        <h3 class="text-xl font-semibold mt-4">Batata com Cheddar e Bacon</h3>
         <p class="text-gray-300">Batata com cheddar e bacon (150g).</p>
         <p class="text-red-500 font-bold mt-2">R$ 18,00</p>
-        <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Onion Rings', 18.00)">Adicionar ao Carrinho</button>
+        <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Batata com Cheddar e Bacon', 18.00)">Adicionar ao Carrinho</button>
       </div>
     </div>
   </section>
-    </div>
-    
-  </section>
- 
-   
 
   <!-- Seção Bebidas -->
   <section id="bebidas" class="py-10 px-4 bg-gray-900">
     <h2 class="text-3xl font-bold text-center mb-6">Bebidas</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-     <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
-  <img src="img/Lata.jpeg" alt="Refrigerante" class="w-full h-48 object-cover rounded-md">
-  <h3 class="text-xl font-semibold mt-4">Refrigerante</h3>
-  <p class="text-gray-300">Lata de 350ml (escolha o sabor).</p>
-  <p class="text-red-500 font-bold mt-2">R$ 7,00</p>
-  <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleBebidaModal()">Escolher Sabor</button>
-</div>
-
-    <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
-  <img src="img/suco.jpeg" alt="Suco Natural" class="w-full h-48 object-cover rounded-md">
-  <h3 class="text-xl font-semibold mt-4">Suco Natural</h3>
-  <p class="text-gray-300">Copo de 300ml (laranja, limão, abacaxi).</p>
-  <p class="text-red-500 font-bold mt-2">R$ 10,00</p>
-  <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleSucoModal()">Escolher Sabor</button>
-</div>
-
+      <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+        <img src="img/Lata.jpeg" alt="Refrigerante" class="w-full h-48 object-cover rounded-md">
+        <h3 class="text-xl font-semibold mt-4">Refrigerante</h3>
+        <p class="text-gray-300">Lata de 350ml (escolha o sabor).</p>
+        <p class="text-red-500 font-bold mt-2">R$ 7,00</p>
+        <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleBebidaModal()">Escolher Sabor</button>
+      </div>
+      <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+        <img src="img/suco.jpeg" alt="Suco Natural" class="w-full h-48 object-cover rounded-md">
+        <h3 class="text-xl font-semibold mt-4">Suco Natural</h3>
+        <p class="text-gray-300">Copo de 300ml (laranja, limão, abacaxi).</p>
+        <p class="text-red-500 font-bold mt-2">R$ 10,00</p>
+        <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleSucoModal()">Escolher Sabor</button>
+      </div>
+    </div>
   </section>
 
   <!-- Seção Sobremesas -->
   <section id="sobremesas" class="py-10 px-4 bg-black">
     <h2 class="text-3xl font-bold text-center mb-6">Sobremesas</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-     <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
-  <img src="img/milk.jpeg" alt="Milkshake" class="w-full h-48 object-cover rounded-md">
-  <h3 class="text-xl font-semibold mt-4">Milkshake</h3>
-  <p class="text-gray-300">Copo de 400ml (chocolate, morango, baunilha).</p>
-  <p class="text-red-500 font-bold mt-2">R$ 20,00</p>
-  <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleMilkshakeModal()">Escolher Sabor</button>
-</div>
-
+      <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+        <img src="img/milk.jpeg" alt="Milkshake" class="w-full h-48 object-cover rounded-md">
+        <h3 class="text-xl font-semibold mt-4">Milkshake</h3>
+        <p class="text-gray-300">Copo de 400ml (chocolate, morango, baunilha).</p>
+        <p class="text-red-500 font-bold mt-2">R$ 20,00</p>
+        <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleMilkshakeModal()">Escolher Sabor</button>
+      </div>
       <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
         <img src="img/brownie.jpeg" alt="Brownie" class="w-full h-48 object-cover rounded-md">
         <h3 class="text-xl font-semibold mt-4">Brownie</h3>
@@ -207,113 +186,99 @@
       </div>
     </div>
   </section>
- 
 
   <!-- Carrinho de Compras e Informações do Cliente -->
-<section id="carrinho-e-informacoes" class="py-10 px-4 max-w-6xl mx-auto">
-  <h2 class="text-3xl font-bold text-center mb-6">Carrinho de Compras</h2>
+  <section id="carrinho-e-informacoes" class="py-10 px-4 max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-6">Carrinho de Compras</h2>
+    <div id="carrinho-itens" class="bg-gray-800 rounded-lg shadow-lg p-4">
+      <p class="text-gray-300">Nenhum item no carrinho.</p>
+    </div>
+    <p class="text-xl font-bold mt-4">Total: R$ <span id="total">0,00</span></p>
 
-  <!-- Carrinho -->
-  <div id="carrinho-itens" class="bg-gray-800 rounded-lg shadow-lg p-4">
-    <p class="text-gray-300">Nenhum item no carrinho.</p>
-  </div>
+    <form id="orderForm" class="mt-8">
+      <label for="name" class="block text-lg font-semibold">Nome:</label>
+      <input type="text" id="name" class="w-full p-2 bg-gray-700 text-white rounded mt-2" required>
 
-  <p class="text-xl font-bold mt-4">Total: R$ <span id="total">0,00</span></p>
+      <label for="phone" class="block text-lg font-semibold mt-4">Telefone:</label>
+      <input type="text" id="phone" class="w-full p-2 bg-gray-700 text-white rounded mt-2" placeholder="(99) 99999-9999" required>
 
-  <!-- Formulário de Informações do Cliente -->
-  <form id="orderForm" class="mt-8">
-    <label for="name" class="block text-lg font-semibold">Nome:</label>
-    <input type="text" id="name" class="w-full p-2 bg-gray-700 text-white rounded mt-2" required>
+      <label for="address" class="block text-lg font-semibold mt-4">Endereço:</label>
+      <input type="text" id="address" class="w-full p-2 bg-gray-700 text-white rounded mt-2" required>
 
-    <label for="phone" class="block text-lg font-semibold mt-4">Telefone:</label>
-    <input type="text" id="phone" class="w-full p-2 bg-gray-700 text-white rounded mt-2" required>
+      <label for="paymentMethod" class="block text-lg font-semibold mt-4">Forma de pagamento:</label>
+      <select id="paymentMethod" class="w-full p-2 bg-gray-700 text-white rounded mt-2" required>
+        <option value="Pix">Pix</option>
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="Cartão">Cartão</option>
+      </select>
 
-    <label for="address" class="block text-lg font-semibold mt-4">Endereço:</label>
-    <input type="text" id="address" class="w-full p-2 bg-gray-700 text-white rounded mt-2" required>
+ Berg    <label for="changeNeeded" class="block text-lg font-semibold mt-4">Precisa de troco?</label>
+      <input type="text" id="changeNeeded" class="w-full p-2 bg-gray-700 text-white rounded mt-2" placeholder="Ex.: Sim, para R$ 50">
 
-    <label for="paymentMethod" class="block text-lg font-semibold mt-4">Forma de pagamento:</label>
-    <select id="paymentMethod" class="w-full p-2 bg-gray-700 text-white rounded mt-2" required>
-      <option value="Pix">Pix</option>
-      <option value="Dinheiro">Dinheiro</option>
-      <option value="Cartão">Cartão</option>
-    </select>
-
-    <label for="changeNeeded" class="block text-lg font-semibold mt-4">Precisa de troco?</label>
-    <input type="text" id="changeNeeded" class="w-full p-2 bg-gray-700 text-white rounded mt-2">
-
-    <button type="submit" class="mt-6 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 w-full">Finalizar Pedido</button>
-  </form>
-</section>
-
+      <button type="submit" class="mt-6 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 w-full">Finalizar Pedido</button>
+    </form>
+  </section>
 
   <!-- Rodapé -->
   <footer class="bg-gray-900 text-white text-center py-6">
-    <p>© 2025 Hamburgueria. Todos os direitos reservados. Desenvolvido por Marcos Souza</p>
+    <p>© 2025 Hamburgueria La Brasa. Todos os direitos reservados. Desenvolvido por Marcos Souza</p>
     <p>Contato: (17) 99604-3167 | marcossouzasia@gmail.com</p>
   </footer>
-  <script src="script.js"></script>
 
+  <!-- Modais -->
   <div id="modalBebida" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
-  <div class="bg-gray-800 text-white rounded-lg p-6 w-full max-w-md shadow-lg">
-    <h2 class="text-xl font-bold mb-4 text-center">Escolha seu Refrigerante</h2>
-    <form id="formBebida" class="space-y-4">
-      <label class="block">
-        <input type="radio" name="saborBebida" value="Coca-Cola" class="mr-2"> Coca-Cola
-      </label>
-      <label class="block">
-        <input type="radio" name="saborBebida" value="Guaraná" class="mr-2"> Guaraná
-      </label>
-      <label class="block">
-        <input type="radio" name="saborBebida" value="Sprite" class="mr-2"> Sprite
-      </label>
-      <div class="flex justify-end mt-6 space-x-3">
-        <button type="button" onclick="toggleBebidaModal()" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700">Cancelar</button>
-        <button type="button" onclick="adicionarBebida()" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700">Adicionar</button>
-      </div>
-    </form>
+    <div class="bg-gray-800 text-white rounded-lg p-6 w-full max-w-md shadow-lg">
+      <h2 class="text-xl font-bold mb-4 text-center">Escolha seu Refrigerante</h2>
+      <form id="formBebida" class="space-y-4">
+        <label class="block"><input type="radio" name="saborBebida" value="Coca-Cola" class="mr-2"> Coca-Cola</label>
+        <label class="block"><input type="radio" name="saborBebida" value="Guaraná" class="mr-2"> Guaraná</label>
+        <label class="block"><input type="radio" name="saborBebida" value="Sprite" class="mr-2"> Sprite</label>
+        <div class="flex justify-end mt-6 space-x-3">
+          <button type="button" onclick="toggleBebidaModal()" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700">Cancelar</button>
+          <button type="button" onclick="adicionarBebida()" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700">Adicionar</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
-<div id="modalSuco" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
-  <div class="bg-gray-800 text-white rounded-lg p-6 w-full max-w-md shadow-lg">
-    <h2 class="text-xl font-bold mb-4 text-center">Escolha seu Suco</h2>
-    <form class="space-y-4">
-      <label class="block"><input type="radio" name="saborSuco" value="Laranja" class="mr-2"> Laranja</label>
-      <label class="block"><input type="radio" name="saborSuco" value="Limão" class="mr-2"> Limão</label>
-      <label class="block"><input type="radio" name="saborSuco" value="Abacaxi" class="mr-2"> Abacaxi</label>
-      <div class="flex justify-end mt-6 space-x-3">
-        <button type="button" onclick="toggleSucoModal()" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700">Cancelar</button>
-        <button type="button" onclick="adicionarSuco()" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700">Adicionar</button>
-      </div>
-    </form>
+  <div id="modalSuco" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
+    <div class="bg-gray-800 text-white rounded-lg p-6 w-full max-w-md shadow-lg">
+      <h2 class="text-xl font-bold mb-4 text-center">Escolha seu Suco</h2>
+      <form class="space-y-4">
+        <label class="block"><input type="radio" name="saborSuco" value="Laranja" class="mr-2"> Laranja</label>
+        <label class="block"><input type="radio" name="saborSuco" value="Limão" class="mr-2"> Limão</label>
+        <label class="block"><input type="radio" name="saborSuco" value="Abacaxi" class="mr-2"> Abacaxi</label>
+        <div class="flex justify-end mt-6 space-x-3">
+          <button type="button" onclick="toggleSucoModal()" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700">Cancelar</button>
+          <button type="button" onclick="adicionarSuco()" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700">Adicionar</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
-<div id="modalMilkshake" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
-  <div class="bg-gray-800 text-white rounded-lg p-6 w-full max-w-md shadow-lg">
-    <h2 class="text-xl font-bold mb-4 text-center">Escolha seu Milkshake</h2>
-    <form class="space-y-4">
-      <label class="block"><input type="radio" name="saborMilkshake" value="Chocolate" class="mr-2"> Chocolate</label>
-      <label class="block"><input type="radio" name="saborMilkshake" value="Morango" class="mr-2"> Morango</label>
-      <label class="block"><input type="radio" name="saborMilkshake" value="Baunilha" class="mr-2"> Baunilha</label>
-      <div class="flex justify-end mt-6 space-x-3">
-        <button type="button" onclick="toggleMilkshakeModal()" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700">Cancelar</button>
-        <button type="button" onclick="adicionarMilkshake()" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700">Adicionar</button>
-      </div>
-    </form>
+  <div id="modalMilkshake" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
+    <div class="bg-gray-800 text-white rounded-lg p-6 w-full max-w-md shadow-lg">
+      <h2 class="text-xl font-bold mb-4 text-center">Escolha seu Milkshake</h2>
+      <form class="space-y-4">
+        <label class="block"><input type="radio" name="saborMilkshake" value="Chocolate" class="mr-2"> Chocolate</label>
+        <label class="block"><input type="radio" name="saborMilkshake" value="Morango" class="mr-2"> Morango</label>
+        <label class="block"><input type="radio" name="saborMilkshake" value="Baunilha" class="mr-2"> Baunilha</label>
+        <div class="flex justify-end mt-6 space-x-3">
+          <button type="button" onclick="toggleMilkshakeModal()" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700">Cancelar</button>
+          <button type="button" onclick="adicionarMilkshake()" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700">Adicionar</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/cardapiodigital/sw.js')
-      .then(registration => {
-        console.log('Service Worker registrado com sucesso:', registration);
-      })
-      .catch(error => {
-        console.log('Falha ao registrar o Service Worker:', error);
-      });
-  }
-</script>
+  <!-- Scripts -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/cardapiodigital/sw.js')
+        .then(registration => console.log('Service Worker registrado:', registration))
+        .catch(error => console.log('Erro ao registrar Service Worker:', error));
+    }
+  </script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>

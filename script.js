@@ -1,8 +1,23 @@
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
+import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBl6CcTHU42IFBsQjrFkQxOW2yRekH8muQ",
+  authDomain: "cardapiodigital-9ef11.firebaseapp.com",
+  projectId: "cardapiodigital-9ef11",
+  storageBucket: "cardapiodigital-9ef11.firebasestorage.app",
+  messagingSenderId: "926971158968",
+  appId: "1:926971158968:web:993662b801af84273faf4d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 let carrinho = [];
 let total = 0;
 
 function adicionarAoCarrinho(nome, preco) {
+  console.log(`Adicionando ao carrinho: ${nome}, R$ ${preco}`);
   const itemExistente = carrinho.find(item => item.nome === nome);
 
   if (itemExistente) {
@@ -19,7 +34,7 @@ function adicionarAoCarrinho(nome, preco) {
 
   total += preco;
   atualizarCarrinho();
-  exibirNotificacao(nome); // Chama a notificação com o nome do item
+  exibirNotificacao(nome);
 }
 
 function removerDoCarrinho(index) {
@@ -50,20 +65,33 @@ function atualizarCarrinho() {
   }
 
   document.getElementById('total').textContent = total.toFixed(2);
+  localStorage.setItem('carrinho', JSON.stringify(carrinho));
 }
-document.getElementById('orderForm').addEventListener('submit', function(event) {
+
+document.getElementById('orderForm').addEventListener('submit', async function(event) {
   event.preventDefault();
 
-  // Captura os dados do formulário de cliente
-  const name = document.getElementById('name').value;
-  const phone = document.getElementById('phone').value;
-  const address = document.getElementById('address').value;
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const address = document.getElementById('address').value.trim();
   const paymentMethod = document.getElementById('paymentMethod').value;
-  const changeNeeded = document.getElementById('changeNeeded').value;
+  const changeNeeded = document.getElementById('changeNeeded').value.trim();
 
-  // Verifica se todos os campos obrigatórios foram preenchidos
+  // Validações
   if (!name || !phone || !address || !paymentMethod) {
     alert('Por favor, preencha todos os campos obrigatórios!');
+    return;
+  }
+
+ const phoneRegex = /^(\(?\d{2}\)?[\s.-]?)?\d{4,5}[-.\s]?\d{4}$/;
+if (!phoneRegex.test(phone)) {
+  alert('Por favor, insira um telefone válido.');
+  return;
+}
+
+
+  if (address.length < 10) {
+    alert('Por favor, insira um endereço válido com pelo menos 10 caracteres.');
     return;
   }
 
@@ -72,52 +100,69 @@ document.getElementById('orderForm').addEventListener('submit', function(event) 
     return;
   }
 
-  // Monta a mensagem do pedido com as informações do cliente
-  let mensagem = `Olá! Gostaria de fazer um pedido:\n\n`;  // Usando '\n' para quebras de linha
-  mensagem += `Nome: ${name}\n`;
-  mensagem += `Telefone: ${phone}\n`;
-  mensagem += `Endereço: ${address}\n`;
-  mensagem += `Forma de pagamento: ${paymentMethod}\n`;
-  mensagem += `Precisa de troco? ${changeNeeded ? changeNeeded : 'Não'}\n\n`;
+  // Confirmação do pedido
+  const confirmacao = confirm(`Confirme seu pedido:\n\nNome: ${name}\nTelefone: ${phone}\nEndereço: ${address}\nTotal: R$ ${total.toFixed(2)}\n\nDeseja enviar?`);
+  if (!confirmacao) return;
 
-  // Adiciona os itens do carrinho na mensagem
-  carrinho.forEach(item => {
-    mensagem += `- ${item.nome} x${item.quantidade} - R$ ${item.subtotal.toFixed(2)}\n`;
-  });
+  // Envio ao Firestore
+  try {
+    console.log('Enviando pedido:', { name, phone, address, items: carrinho, total });
+    await addDoc(collection(db, 'orders'), {
+      name,
+      phone,
+      address,
+      paymentMethod,
+      changeNeeded,
+      items: carrinho.map(item => ({
+        nome: item.nome,
+        quantidade: item.quantidade,
+        subtotal: item.subtotal
+      })),
+      total,
+      status: 'pendente',
+      createdAt: serverTimestamp()
+    });
+    console.log('Pedido salvo com sucesso no Firestore!');
+    alert('Pedido enviado com sucesso! Redirecionando para o WhatsApp.');
 
-  // Adiciona o total na mensagem
-  mensagem += `\nTotal: R$ ${total.toFixed(2)}`;
+    // Envio para WhatsApp
+    let mensagem = `Olá! Gostaria de fazer um pedido:\n\n`;
+    mensagem += `Nome: ${name}\n`;
+    mensagem += `Telefone: ${phone}\n`;
+    mensagem += `Endereço: ${address}\n`;
+    mensagem += `Forma de pagamento: ${paymentMethod}\n`;
+    mensagem += `Precisa de troco? ${changeNeeded || 'Não'}\n\n`;
+    carrinho.forEach(item => {
+      mensagem += `- ${item.nome} x${item.quantidade} - R$ ${item.subtotal.toFixed(2)}\n`;
+    });
+    mensagem += `\nTotal: R$ ${total.toFixed(2)}`;
 
-  // Número do WhatsApp (ajuste conforme necessário)
-  const numeroWhatsApp = '5517996043167';
-  const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+    const numeroWhatsApp = '5517996043167';
+    const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
 
-  // Alerta para o usuário (pode ser removido se preferir)
-  alert('Redirecionando para o WhatsApp com seu pedido!');
+    window.open(linkWhatsApp, '_blank');
 
-  // Redireciona para o WhatsApp
-  window.open(linkWhatsApp, '_blank');
-
-  // Limpa carrinho e total após o envio
-  carrinho = [];
-  total = 0;
-  atualizarCarrinho();
+    // Limpar carrinho e formulário
+    carrinho = [];
+    total = 0;
+    atualizarCarrinho();
+    document.getElementById('orderForm').reset();
+  } catch (error) {
+    console.error('Erro ao salvar pedido:', error);
+    if (error.code === 'permission-denied') {
+      alert('Permissão negada. Verifique as regras do Firestore no Firebase Console.');
+    } else {
+      alert(`Erro ao salvar o pedido: ${error.message}`);
+    }
+  }
 });
 
-// Função para exibir notificação de item adicionado
 function exibirNotificacao(nome) {
-  // Cria o elemento da notificação
   const notificacao = document.createElement('div');
   notificacao.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50';
   notificacao.textContent = `${nome} adicionado ao carrinho!`;
-
-  // Adiciona a notificação ao body
   document.body.appendChild(notificacao);
-
-  // Remove a notificação após 3 segundos
-  setTimeout(() => {
-    notificacao.remove();
-  }, 3000);
+  setTimeout(() => notificacao.remove(), 3000);
 }
 
 function toggleCustomBurgerForm() {
@@ -147,6 +192,7 @@ function addCustomBurger() {
   adicionarAoCarrinho(nome, preco);
   toggleCustomBurgerForm();
 }
+
 function toggleBebidaModal() {
   const modal = document.getElementById('modalBebida');
   modal.classList.toggle('hidden');
@@ -163,13 +209,14 @@ function adicionarBebida() {
   }
 
   if (!selecionado) {
-    alert("Por favor, selecione um sabor de refrigerante.");
+    alert('Por favor, selecione um sabor de refrigerante.');
     return;
   }
 
   adicionarAoCarrinho(`Refrigerante (${selecionado})`, 7.00);
   toggleBebidaModal();
 }
+
 function toggleMilkshakeModal() {
   document.getElementById('modalMilkshake').classList.toggle('hidden');
 }
@@ -185,7 +232,7 @@ function adicionarMilkshake() {
   }
 
   if (!selecionado) {
-    alert("Selecione um sabor de milkshake.");
+    alert('Por favor, selecione um sabor de milkshake.');
     return;
   }
 
@@ -208,7 +255,7 @@ function adicionarSuco() {
   }
 
   if (!selecionado) {
-    alert("Selecione um sabor de suco.");
+    alert('Por favor, selecione um sabor de suco.');
     return;
   }
 
@@ -216,43 +263,45 @@ function adicionarSuco() {
   toggleSucoModal();
 }
 
-// Salvar
-localStorage.setItem('carrinho', JSON.stringify(carrinho));
-
-// Recuperar ao carregar
 const carrinhoSalvo = JSON.parse(localStorage.getItem('carrinho'));
 if (carrinhoSalvo) {
   carrinho = carrinhoSalvo;
+  total = carrinho.reduce((sum, item) => sum + item.subtotal, 0);
   atualizarCarrinho();
 }
 
 let deferredPrompt;
 const installButton = document.getElementById('install-button');
 
-// Ouve o evento 'beforeinstallprompt'
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
   installButton.style.display = 'block';
 });
 
-// Lida com o clique no botão de instalação
 installButton.addEventListener('click', async () => {
   if (deferredPrompt) {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      console.log('Usuário aceitou a instalação');
-    } else {
-      console.log('Usuário recusou a instalação');
-    }
+    console.log(outcome === 'accepted' ? 'Usuário aceitou a instalação' : 'Usuário recusou a instalação');
     deferredPrompt = null;
     installButton.style.display = 'none';
   }
 });
 
-// Oculta o botão após a instalação
 window.addEventListener('appinstalled', () => {
   console.log('PWA instalado com sucesso');
   installButton.style.display = 'none';
 });
+
+// Expor funções no escopo global
+window.adicionarAoCarrinho = adicionarAoCarrinho;
+window.removerDoCarrinho = removerDoCarrinho;
+window.toggleCustomBurgerForm = toggleCustomBurgerForm;
+window.addCustomBurger = addCustomBurger;
+window.toggleBebidaModal = toggleBebidaModal;
+window.adicionarBebida = adicionarBebida;
+window.toggleMilkshakeModal = toggleMilkshakeModal;
+window.adicionarMilkshake = adicionarMilkshake;
+window.toggleSucoModal = toggleSucoModal;
+window.adicionarSuco = adicionarSuco;

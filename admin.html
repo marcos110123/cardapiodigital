@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Painel de administração da Hamburgueria La Brasa" />
+  <title>Admin - Hamburgueria La Brasa</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+  <div id="auth-container" class="flex items-center justify-center min-h-screen">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+      <h2 class="text-2xl font-bold mb-4 text-center">Login Administrador</h2>
+      <form id="login-form">
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium">Email</label>
+          <input type="email" id="email" class="w-full p-2 mt-1 bg-gray-700 rounded" required />
+        </div>
+        <div class="mb-4">
+          <label for="password" class="block text-sm font-medium">Senha</label>
+          <input type="password" id="password" class="w-full p-2 mt-1 bg-gray-700 rounded" required />
+        </div>
+        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Entrar</button>
+      </form>
+      <p id="error-message" class="text-red-500 mt-4 text-center hidden"></p>
+    </div>
+  </div>
+
+  <div id="admin-container" class="container mx-auto p-6 hidden">
+    <h1 class="text-3xl font-bold mb-6">Painel de Administração</h1>
+    <button id="logout-button" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mb-4">Sair</button>
+
+    <div class="mb-4">
+      <label for="status-filter" class="block text-sm font-medium">Filtrar por Status</label>
+      <select id="status-filter" class="p-2 bg-gray-700 rounded">
+        <option value="todos">Todos</option>
+        <option value="pendente">Pendente</option>
+        <option value="concluido">Concluído</option>
+      </select>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full bg-gray-800 rounded">
+        <thead>
+          <tr>
+            <th class="p-3 text-left">Data</th>
+            <th class="p-3 text-left">Nome</th>
+            <th class="p-3 text-left">Telefone</th>
+            <th class="p-3 text-left">Endereço</th>
+            <th class="p-3 text-left">Pagamento</th>
+            <th class="p-3 text-left">Troco</th>
+            <th class="p-3 text-left">Itens</th>
+            <th class="p-3 text-left">Total</th>
+            <th class="p-3 text-left">Status</th>
+            <th class="p-3 text-left">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="orders-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="print-area" class="hidden"></div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { getFirestore, collection, query, where, orderBy, getDocs, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBl6CcTHU42IFBsQjrFkQxOW2yRekH8muQ",
+      authDomain: "cardapiodigital-9ef11.firebaseapp.com",
+      projectId: "cardapiodigital-9ef11",
+      storageBucket: "cardapiodigital-9ef11.appspot.com",
+      messagingSenderId: "926971158968",
+      appId: "1:926971158968:web:993662b801af84273faf4d"
+    };
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          document.getElementById('auth-container').classList.add('hidden');
+          document.getElementById('admin-container').classList.remove('hidden');
+          loadOrders();
+        } else {
+          document.getElementById('auth-container').classList.remove('hidden');
+          document.getElementById('admin-container').classList.add('hidden');
+        }
+      });
+
+      document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorMessage = document.getElementById('error-message');
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          errorMessage.classList.add('hidden');
+        } catch (error) {
+          errorMessage.textContent = 'Email ou senha inválidos!';
+          errorMessage.classList.remove('hidden');
+        }
+      });
+
+      document.getElementById('logout-button').addEventListener('click', async () => {
+        await signOut(auth);
+      });
+
+      document.getElementById('status-filter').addEventListener('change', loadOrders);
+
+      async function loadOrders() {
+        try {
+          const statusFilter = document.getElementById('status-filter').value;
+          let q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
+
+          if (statusFilter !== 'todos') {
+            q = query(collection(db, 'orders'), where('status', '==', statusFilter), orderBy('createdAt', 'desc'));
+          }
+
+          const snapshot = await getDocs(q);
+          const ordersTable = document.getElementById('orders-table');
+          ordersTable.innerHTML = '';
+
+          snapshot.forEach(docSnap => {
+            const order = docSnap.data();
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td class="p-3">${new Date(order.createdAt.toDate()).toLocaleString()}</td>
+              <td class="p-3">${order.name}</td>
+              <td class="p-3">${order.phone}</td>
+              <td class="p-3">${order.address || 'Não informado'}</td>
+              <td class="p-3">${order.paymentMethod || 'Não informado'}</td>
+              <td class="p-3">${order.changeNeeded || 'Não'}</td>
+              <td class="p-3">
+                <ul class="list-disc pl-4">
+                  ${order.items.map(item => `
+                    <li>${item.nome} x${item.quantidade} - R$ ${item.subtotal.toFixed(2)}</li>
+                  `).join('')}
+                </ul>
+              </td>
+              <td class="p-3">R$ ${order.total?.toFixed(2) || '0,00'}</td>
+              <td class="p-3">
+                <select class="status-select p-1 bg-gray-700 rounded" data-id="${docSnap.id}">
+                  <option value="pendente" ${order.status === 'pendente' ? 'selected' : ''}>Pendente</option>
+                  <option value="concluido" ${order.status === 'concluido' ? 'selected' : ''}>Concluído</option>
+                </select>
+              </td>
+              <td class="p-3">
+                <button class="print-button bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700" data-id="${docSnap.id}">Imprimir</button>
+              </td>
+            `;
+            ordersTable.appendChild(row);
+          });
+
+          document.querySelectorAll('.status-select').forEach(select => {
+            select.addEventListener('change', async (e) => {
+              const orderId = e.target.dataset.id;
+              const newStatus = e.target.value;
+              await updateDoc(doc(db, 'orders', orderId), { status: newStatus });
+            });
+          });
+
+          document.querySelectorAll('.print-button').forEach(button => {
+            button.addEventListener('click', async (e) => {
+              const orderId = e.target.dataset.id;
+              const docSnap = await getDoc(doc(db, 'orders', orderId));
+              if (!docSnap.exists()) return;
+
+              const order = docSnap.data();
+
+              const htmlContent = `
+                <html>
+                <head>
+                  <title>Pedido - Hamburgueria La Brasa</title>
+                  <style>
+                    body { font-family: sans-serif; padding: 20px; color: #000; }
+                    h2 { font-size: 24px; margin-bottom: 10px; }
+                    p, li { font-size: 16px; }
+                    ul { margin-top: 10px; padding-left: 20px; }
+                  </style>
+                </head>
+                <body>
+                  <h2>Hamburgueria La Brasa - Pedido</h2>
+                  <p><strong>Data:</strong> ${new Date(order.createdAt.toDate()).toLocaleString()}</p>
+                  <p><strong>Nome:</strong> ${order.name}</p>
+                  <p><strong>Telefone:</strong> ${order.phone}</p>
+                  <p><strong>Endereço:</strong> ${order.address}</p>
+                  <p><strong>Pagamento:</strong> ${order.paymentMethod}</p>
+                  <p><strong>Troco:</strong> ${order.changeNeeded || 'Não'}</p>
+                  <h3>Itens</h3>
+                  <ul>
+                    ${order.items.map(item => `
+                      <li>${item.nome} x${item.quantidade} - R$ ${item.subtotal.toFixed(2)}</li>
+                    `).join('')}
+                  </ul>
+                  <p><strong>Total:</strong> R$ ${order.total?.toFixed(2) || '0,00'}</p>
+                </body>
+                </html>
+              `;
+
+              const printWindow = window.open('', '', 'width=800,height=600');
+              printWindow.document.write(htmlContent);
+              printWindow.document.close();
+              printWindow.focus();
+              printWindow.print();
+              printWindow.close();
+            });
+          });
+        } catch (error) {
+          console.error('Erro ao carregar pedidos:', error);
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao inicializar Firebase:', error);
+    }
+  </script>
+</body>
+</html>
