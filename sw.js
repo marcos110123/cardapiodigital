@@ -2,7 +2,7 @@ const CACHE_NAME = 'la-brasa-cache-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/style.css',
+  '/styles.css',
   '/script.js',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png'
