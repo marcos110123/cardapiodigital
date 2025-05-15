@@ -227,23 +227,32 @@ if (carrinhoSalvo) {
 }
 
 let deferredPrompt;
+const installButton = document.getElementById('install-button');
+
+// Ouve o evento 'beforeinstallprompt'
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  // Mostrar botão de instalação personalizado
-  const installButton = document.getElementById('install-button');
   installButton.style.display = 'block';
+});
 
-  installButton.addEventListener('click', () => {
-    installButton.style.display = 'none';
+// Lida com o clique no botão de instalação
+installButton.addEventListener('click', async () => {
+  if (deferredPrompt) {
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('Usuário aceitou a instalação');
-      } else {
-        console.log('Usuário recusou a instalação');
-      }
-      deferredPrompt = null;
-    });
-  });
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('Usuário aceitou a instalação');
+    } else {
+      console.log('Usuário recusou a instalação');
+    }
+    deferredPrompt = null;
+    installButton.style.display = 'none';
+  }
+});
+
+// Oculta o botão após a instalação
+window.addEventListener('appinstalled', () => {
+  console.log('PWA instalado com sucesso');
+  installButton.style.display = 'none';
 });
