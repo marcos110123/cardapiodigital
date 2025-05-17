@@ -16,6 +16,34 @@ const db = getFirestore(app);
 let carrinho = [];
 let total = 0;
 
+
+let secaoAtiva = null;
+
+function mostrarSecao(id) {
+  const secoes = document.querySelectorAll('.section-produto');
+
+  // Se já está visível e clicou novamente, esconde
+  if (secaoAtiva === id) {
+    document.getElementById(id).style.display = 'none';
+    secaoAtiva = null;
+    return;
+  }
+
+  // Esconde todas as seções
+  secoes.forEach(secao => secao.style.display = 'none');
+
+  // Mostra a nova seção e guarda como ativa
+  const secaoSelecionada = document.getElementById(id);
+  if (secaoSelecionada) {
+    secaoSelecionada.style.display = 'block';
+    secaoSelecionada.scrollIntoView({ behavior: 'smooth' });
+    secaoAtiva = id;
+  }
+}
+
+// Expor globalmente
+window.mostrarSecao = mostrarSecao;
+
 function adicionarAoCarrinho(nome, preco) {
   console.log(`Adicionando ao carrinho: ${nome}, R$ ${preco}`);
   const itemExistente = carrinho.find(item => item.nome === nome);
@@ -166,9 +194,13 @@ function exibirNotificacao(nome) {
 }
 
 function toggleCustomBurgerForm() {
-  const form = document.getElementById('customBurgerForm');
-  form.classList.toggle('hidden');
+  const modal = document.getElementById('customBurgerModal');
+  modal.classList.toggle('hidden');
 }
+document.getElementById('customBurgerModal').addEventListener('click', function(e) {
+  if (e.target === this) toggleCustomBurgerForm();
+});
+
 
 function addCustomBurger() {
   const burgerType = document.getElementById('burgerType').value.split('|');

@@ -23,17 +23,35 @@
     </div>
   </header>
 
-  <!-- Navegação -->
-  <nav class="bg-black text-white py-4">
-    <ul class="flex flex-wrap justify-center gap-4 sm:gap-6">
-      <li><a href="#hamburgueres" class="hover:text-red-500">Hambúrgueres</a></li>
-      <li><a href="#pizzas" class="hover:text-red-500">Pizzas</a></li>
-      <li><a href="#acompanhamentos" class="hover:text-red-500">Acompanhamentos</a></li>
-      <li><a href="#bebidas" class="hover:text-red-500">Bebidas</a></li>
-      <li><a href="#sobremesas" class="hover:text-red-500">Sobremesas</a></li>
-      
-    </ul>
-  </nav>
+<nav class="bg-black text-white py-6">
+  <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
+    <button onclick="mostrarSecao('hamburgueres')" class="btn-nav">
+      Hambúrgueres
+    </button>
+    <span class="separator">|</span>
+    <button onclick="mostrarSecao('pizzas')" class="btn-nav">
+      Pizzas
+    </button>
+    <span class="separator">|</span>
+    <button onclick="mostrarSecao('jantar')" class="btn-nav">
+      Jantar
+    </button>
+    <span class="separator">|</span>
+    <button onclick="mostrarSecao('acompanhamentos')" class="btn-nav">
+      Acompanhamentos
+    </button>
+    <span class="separator">|</span>
+    <button onclick="mostrarSecao('bebidas')" class="btn-nav">
+      Bebidas
+    </button>
+    <span class="separator">|</span>
+    <button onclick="mostrarSecao('sobremesas')" class="btn-nav">
+      Sobremesas
+    </button>
+  </div>
+</nav>
+
+
 
   <!-- Botão de Instalação -->
   <button id="install-button" style="display: none; position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
@@ -41,7 +59,7 @@
   </button>
 
   <!-- Seção Hambúrgueres -->
-  <section id="hamburgueres" class="py-10 px-4 bg-gray-900">
+  <section id="hamburgueres" class="section-produto py-10 px-4 bg-gray-900">
     <h2 class="text-3xl font-bold text-center mb-6">Hambúrgueres</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
        <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
@@ -74,8 +92,6 @@
       </div>
      
     </div>
-
-    
 
     <!-- Formulário de Hambúrguer Personalizado -->
     <div id="customBurgerForm" class="hidden bg-gray-800 p-6 mt-6 rounded-lg shadow-lg text-white max-w-4xl mx-auto">
@@ -122,8 +138,43 @@
     </div>
   </section>
 
+  <section id="jantar" class="section-produto py-10 px-4 bg-gray-900 hidden">
+  <h2 class="text-3xl font-bold text-center mb-6 text-white">Pratos</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+
+    <!-- Filé ao Molho 4 Queijos -->
+    <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+      <img src="img/filé.jpg" alt="Filé ao Molho 4 Queijos" class="w-full h-48 object-cover rounded-md">
+      <h3 class="text-xl font-semibold mt-4 text-white">Filé ao Molho 4 Queijos</h3>
+      <p class="text-gray-300">Filé mignon grelhado coberto com molho de 4 queijos, acompanhado de arroz e batatas rústicas.</p>
+      <p class="text-red-500 font-bold mt-2">R$ 38,00</p>
+      <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Filé ao Molho 4 Queijos', 38.00)">Adicionar ao Carrinho</button>
+    </div>
+
+    <!-- Parmegiana de Frango -->
+    <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+      <img src="img/frango.jpg" alt="Parmegiana de Frango" class="w-full h-48 object-cover rounded-md">
+      <h3 class="text-xl font-semibold mt-4 text-white">Parmegiana de Frango</h3>
+      <p class="text-gray-300">Peito de frango empanado, molho de tomate e queijo gratinado. Acompanha arroz e batata frita.</p>
+      <p class="text-red-500 font-bold mt-2">R$ 34,00</p>
+      <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Parmegiana de Frango', 34.00)">Adicionar ao Carrinho</button>
+    </div>
+
+    <!-- Frango Grelhado com Legumes -->
+    <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+      <img src="img/legumes.jpg" alt="Frango Grelhado com Legumes" class="w-full h-48 object-cover rounded-md">
+      <h3 class="text-xl font-semibold mt-4 text-white">Frango Grelhado com Legumes</h3>
+      <p class="text-gray-300">Peito de frango grelhado servido com legumes no vapor e arroz integral.</p>
+      <p class="text-red-500 font-bold mt-2">R$ 30,00</p>
+      <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Frango Grelhado com Legumes', 30.00)">Adicionar ao Carrinho</button>
+    </div>
+
+  </div>
+</section>
+
+
   <!-- Seção Acompanhamentos -->
-  <section id="acompanhamentos" class="py-10 px-4 bg-black">
+  <section id="acompanhamentos"  class="section-produto py-10 px-4 bg-gray-900">
     <h2 class="text-3xl font-bold text-center mb-6">Acompanhamentos</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
       <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
@@ -151,7 +202,7 @@
   </section>
 
   <!-- Seção Pizzas -->
-<section id="pizzas" class="py-10 px-4 bg-gray-900">
+<section id="pizzas"  class="section-produto py-10 px-4 bg-gray-900">
   <h2 class="text-3xl font-bold text-center mb-6">Pizzas</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
     <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
@@ -180,7 +231,7 @@
 
 
   <!-- Seção Bebidas -->
-  <section id="bebidas" class="py-10 px-4 bg-gray-900">
+  <section id="bebidas"  class="section-produto py-10 px-4 bg-gray-900">
     <h2 class="text-3xl font-bold text-center mb-6">Bebidas</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
       <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
@@ -201,7 +252,7 @@
   </section>
 
   <!-- Seção Sobremesas -->
-  <section id="sobremesas" class="py-10 px-4 bg-black">
+  <section id="sobremesas"  class="section-produto py-10 px-4 bg-gray-900">
     <h2 class="text-3xl font-bold text-center mb-6">Sobremesas</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
       <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
@@ -310,6 +361,59 @@
       </form>
     </div>
   </div>
+
+  <!-- Modal do Monte seu Hambúrguer -->
+<div id="customBurgerModal" class="fixed inset-0 z-50 bg-black bg-opacity-70 hidden flex items-center justify-center">
+  <div class="bg-gray-800 text-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6 relative">
+    <button onclick="toggleCustomBurgerForm()" class="absolute top-3 right-3 text-white text-2xl">&times;</button>
+    <h3 class="text-2xl font-bold mb-6 text-center">Monte seu Hambúrguer</h3>
+
+    <form id="customBurgerBuilder" class="space-y-6">
+      <div>
+        <label class="block font-semibold mb-2">Tipo de Hambúrguer:</label>
+        <select id="burgerType" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
+          <option value="beef|15.00">Hambúrguer Bovino (150g) - R$ 15,00</option>
+          <option value="chicken|12.00">Hambúrguer de Frango (150g) - R$ 12,00</option>
+          <option value="veggie|14.00">Hambúrguer Vegetariano - R$ 14,00</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-2">Ingredientes (até 5):</label>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+          <label><input type="checkbox" name="toppings" value="lettuce|1.00" class="mr-2">Alface - R$ 1,00</label>
+          <label><input type="checkbox" name="toppings" value="tomato|1.00" class="mr-2">Tomate - R$ 1,00</label>
+          <label><input type="checkbox" name="toppings" value="cheddar|3.00" class="mr-2">Cheddar - R$ 3,00</label>
+          <label><input type="checkbox" name="toppings" value="bacon|4.00" class="mr-2">Bacon - R$ 4,00</label>
+          <label><input type="checkbox" name="toppings" value="onion|2.00" class="mr-2">Cebola Caramelizada - R$ 2,00</label>
+          <label><input type="checkbox" name="toppings" value="pickle|1.50" class="mr-2">Picles - R$ 1,50</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-2">Molho:</label>
+        <select id="sauce" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
+          <option value="maionese|0.00">Maionese - Grátis</option>
+          <option value="barbecue|2.00">Barbecue - R$ 2,00</option>
+          <option value="spicy|2.00">Picante - R$ 2,00</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-2">Pão:</label>
+        <select id="bread" class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
+          <option value="brioche|5.00">Pão Brioche - R$ 5,00</option>
+          <option value="australiano|6.00">Pão Australiano - R$ 6,00</option>
+        </select>
+      </div>
+
+      <div class="text-center">
+        <button type="button" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700" onclick="addCustomBurger()">Adicionar ao Carrinho</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 
   <!-- Scripts -->
   <script>
