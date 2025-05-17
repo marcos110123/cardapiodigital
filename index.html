@@ -27,6 +27,7 @@
   <nav class="bg-black text-white py-4">
     <ul class="flex flex-wrap justify-center gap-4 sm:gap-6">
       <li><a href="#hamburgueres" class="hover:text-red-500">Hambúrgueres</a></li>
+      <li><a href="#pizzas" class="hover:text-red-500">Pizzas</a></li>
       <li><a href="#acompanhamentos" class="hover:text-red-500">Acompanhamentos</a></li>
       <li><a href="#bebidas" class="hover:text-red-500">Bebidas</a></li>
       <li><a href="#sobremesas" class="hover:text-red-500">Sobremesas</a></li>
@@ -43,6 +44,13 @@
   <section id="hamburgueres" class="py-10 px-4 bg-gray-900">
     <h2 class="text-3xl font-bold text-center mb-6">Hambúrgueres</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+       <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+        <img src="img/monte.jpeg" alt="Monte seu Lanche" class="w-full h-48 object-cover rounded-md">
+        <h3 class="text-xl font-semibold mt-4">Monte seu Lanche</h3>
+        <p class="text-gray-300">Personalize seu hambúrguer com os ingredientes de sua escolha.</p>
+        <p class="text-red-500 font-bold mt-2">A partir de R$ 20,00</p>
+        <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleCustomBurgerForm()">Montar seu Lanche</button>
+      </div>
       <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
         <img src="img/hamburguer1.jpeg" alt="Hambúrguer Clássico" class="w-full h-48 object-cover rounded-md">
         <h3 class="text-xl font-semibold mt-4">Clássico</h3>
@@ -64,14 +72,10 @@
         <p class="text-red-500 font-bold mt-2">R$ 28,00</p>
         <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Veggie', 28.00)">Adicionar ao Carrinho</button>
       </div>
-      <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
-        <img src="img/monte.jpeg" alt="Monte seu Lanche" class="w-full h-48 object-cover rounded-md">
-        <h3 class="text-xl font-semibold mt-4">Monte seu Lanche</h3>
-        <p class="text-gray-300">Personalize seu hambúrguer com os ingredientes de sua escolha.</p>
-        <p class="text-red-500 font-bold mt-2">A partir de R$ 20,00</p>
-        <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="toggleCustomBurgerForm()">Montar seu Lanche</button>
-      </div>
+     
     </div>
+
+    
 
     <!-- Formulário de Hambúrguer Personalizado -->
     <div id="customBurgerForm" class="hidden bg-gray-800 p-6 mt-6 rounded-lg shadow-lg text-white max-w-4xl mx-auto">
@@ -145,6 +149,35 @@
       </div>
     </div>
   </section>
+
+  <!-- Seção Pizzas -->
+<section id="pizzas" class="py-10 px-4 bg-gray-900">
+  <h2 class="text-3xl font-bold text-center mb-6">Pizzas</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+    <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+      <img src="img/pizza1.jpg" alt="Pizza Margherita" class="w-full h-48 object-cover rounded-md">
+      <h3 class="text-xl font-semibold mt-4">Margherita</h3>
+      <p class="text-gray-300">Molho de tomate, mussarela, manjericão fresco e azeite de oliva.</p>
+      <p class="text-red-500 font-bold mt-2">R$ 38,00</p>
+      <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Margherita', 38.00)">Adicionar ao Carrinho</button>
+    </div>
+    <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+      <img src="img/pizza2.jpg" alt="Pepperoni" class="w-full h-48 object-cover rounded-md">
+      <h3 class="text-xl font-semibold mt-4">Pepperoni</h3>
+      <p class="text-gray-300">Molho de tomate, mussarela e fatias generosas de pepperoni.</p>
+      <p class="text-red-500 font-bold mt-2">R$ 42,00</p>
+      <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Pepperoni', 42.00)">Adicionar ao Carrinho</button>
+    </div>
+    <div class="menu-item bg-gray-800 rounded-lg shadow-lg p-4">
+      <img src="img/pizza3.jpg" alt="Quatro Queijos" class="w-full h-48 object-cover rounded-md">
+      <h3 class="text-xl font-semibold mt-4">Quatro Queijos</h3>
+      <p class="text-gray-300">Mussarela, gorgonzola, parmesão e catupiry sobre molho de tomate.</p>
+      <p class="text-red-500 font-bold mt-2">R$ 45,00</p>
+      <button class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="adicionarAoCarrinho('Quatro Queijos', 45.00)">Adicionar ao Carrinho</button>
+    </div>
+  </div>
+</section>
+
 
   <!-- Seção Bebidas -->
   <section id="bebidas" class="py-10 px-4 bg-gray-900">

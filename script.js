@@ -305,3 +305,4 @@ window.toggleMilkshakeModal = toggleMilkshakeModal;
 window.adicionarMilkshake = adicionarMilkshake;
 window.toggleSucoModal = toggleSucoModal;
 window.adicionarSuco = adicionarSuco;
+
