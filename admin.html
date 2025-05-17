@@ -1,226 +1,297 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Painel de administração da Hamburgueria La Brasa" />
-  <title>Admin - Hamburgueria La Brasa</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
-</head>
-<body class="bg-gray-900 text-white min-h-screen">
-  <div id="auth-container" class="flex items-center justify-center min-h-screen">
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
-      <h2 class="text-2xl font-bold mb-4 text-center">Login Administrador</h2>
-      <form id="login-form">
-        <div class="mb-4">
-          <label for="email" class="block text-sm font-medium">Email</label>
-          <input type="email" id="email" class="w-full p-2 mt-1 bg-gray-700 rounded" required />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Painel de administração da Hamburgueria La Brasa"
+    />
+    <title>Admin - Hamburgueria La Brasa</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-900 text-white min-h-screen">
+    <div
+      id="auth-container"
+      class="flex items-center justify-center min-h-screen"
+    >
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-4 text-center">Login Administrador</h2>
+        <form id="login-form">
+          <div class="mb-4">
+            <label for="email" class="block text-sm font-medium">Email</label>
+            <input
+              type="email"
+              id="email"
+              class="w-full p-2 mt-1 bg-gray-700 rounded"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="password" class="block text-sm font-medium"
+              >Senha</label
+            >
+            <input
+              type="password"
+              id="password"
+              class="w-full p-2 mt-1 bg-gray-700 rounded"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          >
+            Entrar
+          </button>
+        </form>
+        <p id="error-message" class="text-red-500 mt-4 text-center hidden"></p>
+      </div>
+    </div>
+
+    <div id="admin-container" class="container mx-auto p-6 hidden">
+      <h1 class="text-3xl font-bold mb-6">Painel de Administração</h1>
+      <button
+        id="logout-button"
+        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mb-4"
+      >
+        Sair
+      </button>
+
+      <!-- Nova seção para resumo de pedidos por método de pagamento -->
+      <div class="bg-gray-800 p-4 rounded shadow-md mb-6">
+        <h3 class="text-xl font-bold mb-4 text-white">
+          Resumo de Pedidos por Método de Pagamento
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-blue-700 p-4 rounded text-white">
+            <h4 class="font-semibold">Cartão</h4>
+            <p>Total de Pedidos: <span id="cardOrders">0</span></p>
+            <p>Valor Total: R$ <span id="cardTotal">0,00</span></p>
+          </div>
+          <div class="bg-green-700 p-4 rounded text-white">
+            <h4 class="font-semibold">Dinheiro</h4>
+            <p>Total de Pedidos: <span id="cashOrders">0</span></p>
+            <p>Valor Total: R$ <span id="cashTotal">0,00</span></p>
+          </div>
+          <div class="bg-purple-700 p-4 rounded text-white">
+            <h4 class="font-semibold">Pix</h4>
+            <p>Total de Pedidos: <span id="pixOrders">0</span></p>
+            <p>Valor Total: R$ <span id="pixTotal">0,00</span></p>
+          </div>
         </div>
-        <div class="mb-4">
-          <label for="password" class="block text-sm font-medium">Senha</label>
-          <input type="password" id="password" class="w-full p-2 mt-1 bg-gray-700 rounded" required />
-        </div>
-        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Entrar</button>
-      </form>
-      <p id="error-message" class="text-red-500 mt-4 text-center hidden"></p>
-    </div>
-  </div>
+      </div>
 
-  <div id="admin-container" class="container mx-auto p-6 hidden">
-    <h1 class="text-3xl font-bold mb-6">Painel de Administração</h1>
-    <button id="logout-button" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mb-4">Sair</button>
+      <div class="mb-4">
+        <label for="status-filter" class="block text-sm font-medium"
+          >Filtrar por Status</label
+        >
+        <select id="status-filter" class="p-2 bg-gray-700 rounded">
+          <option value="todos">Todos</option>
+          <option value="pendente">Pendente</option>
+          <option value="concluido">Concluído</option>
+        </select>
+      </div>
 
-    <div class="mb-4">
-      <label for="status-filter" class="block text-sm font-medium">Filtrar por Status</label>
-      <select id="status-filter" class="p-2 bg-gray-700 rounded">
-        <option value="todos">Todos</option>
-        <option value="pendente">Pendente</option>
-        <option value="concluido">Concluído</option>
-      </select>
+      <div id="orders-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
 
-    <div class="overflow-x-auto">
-      <table class="w-full bg-gray-800 rounded">
-        <thead>
-          <tr>
-            <th class="p-3 text-left">Data</th>
-            <th class="p-3 text-left">Nome</th>
-            <th class="p-3 text-left">Telefone</th>
-            <th class="p-3 text-left">Endereço</th>
-            <th class="p-3 text-left">Pagamento</th>
-            <th class="p-3 text-left">Troco</th>
-            <th class="p-3 text-left">Itens</th>
-            <th class="p-3 text-left">Total</th>
-            <th class="p-3 text-left">Status</th>
-            <th class="p-3 text-left">Ações</th>
-          </tr>
-        </thead>
-        <tbody id="orders-table"></tbody>
-      </table>
-    </div>
-  </div>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+        signOut,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        query,
+        where,
+        orderBy,
+        getDocs,
+        doc,
+        updateDoc,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  <div id="print-area" class="hidden"></div>
+      const firebaseConfig = {
+        apiKey: "AIzaSyBl6CcTHU42IFBsQjrFkQxOW2yRekH8muQ",
+        authDomain: "cardapiodigital-9ef11.firebaseapp.com",
+        projectId: "cardapiodigital-9ef11",
+        storageBucket: "cardapiodigital-9ef11.appspot.com",
+        messagingSenderId: "926971158968",
+        appId: "1:926971158968:web:993662b801af84273faf4d",
+      };
 
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-    import { getFirestore, collection, query, where, orderBy, getDocs, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+      try {
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBl6CcTHU42IFBsQjrFkQxOW2yRekH8muQ",
-      authDomain: "cardapiodigital-9ef11.firebaseapp.com",
-      projectId: "cardapiodigital-9ef11",
-      storageBucket: "cardapiodigital-9ef11.appspot.com",
-      messagingSenderId: "926971158968",
-      appId: "1:926971158968:web:993662b801af84273faf4d"
-    };
-
-    try {
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      const db = getFirestore(app);
-
-      onAuthStateChanged(auth, user => {
-        if (user) {
-          document.getElementById('auth-container').classList.add('hidden');
-          document.getElementById('admin-container').classList.remove('hidden');
-          loadOrders();
-        } else {
-          document.getElementById('auth-container').classList.remove('hidden');
-          document.getElementById('admin-container').classList.add('hidden');
-        }
-      });
-
-      document.getElementById('login-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const errorMessage = document.getElementById('error-message');
-
-        try {
-          await signInWithEmailAndPassword(auth, email, password);
-          errorMessage.classList.add('hidden');
-        } catch (error) {
-          errorMessage.textContent = 'Email ou senha inválidos!';
-          errorMessage.classList.remove('hidden');
-        }
-      });
-
-      document.getElementById('logout-button').addEventListener('click', async () => {
-        await signOut(auth);
-      });
-
-      document.getElementById('status-filter').addEventListener('change', loadOrders);
-
-      async function loadOrders() {
-        try {
-          const statusFilter = document.getElementById('status-filter').value;
-          let q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
-
-          if (statusFilter !== 'todos') {
-            q = query(collection(db, 'orders'), where('status', '==', statusFilter), orderBy('createdAt', 'desc'));
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            document.getElementById("auth-container").classList.add("hidden");
+            document
+              .getElementById("admin-container")
+              .classList.remove("hidden");
+            loadOrders();
+          } else {
+            document
+              .getElementById("auth-container")
+              .classList.remove("hidden");
+            document.getElementById("admin-container").classList.add("hidden");
           }
+        });
 
-          const snapshot = await getDocs(q);
-          const ordersTable = document.getElementById('orders-table');
-          ordersTable.innerHTML = '';
+        document
+          .getElementById("login-form")
+          .addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const errorMessage = document.getElementById("error-message");
 
-          snapshot.forEach(docSnap => {
-            const order = docSnap.data();
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td class="p-3">${new Date(order.createdAt.toDate()).toLocaleString()}</td>
-              <td class="p-3">${order.name}</td>
-              <td class="p-3">${order.phone}</td>
-              <td class="p-3">${order.address || 'Não informado'}</td>
-              <td class="p-3">${order.paymentMethod || 'Não informado'}</td>
-              <td class="p-3">${order.changeNeeded || 'Não'}</td>
-              <td class="p-3">
-                <ul class="list-disc pl-4">
-                  ${order.items.map(item => `
-                    <li>${item.nome} x${item.quantidade} - R$ ${item.subtotal.toFixed(2)}</li>
-                  `).join('')}
-                </ul>
-              </td>
-              <td class="p-3">R$ ${order.total?.toFixed(2) || '0,00'}</td>
-              <td class="p-3">
-                <select class="status-select p-1 bg-gray-700 rounded" data-id="${docSnap.id}">
-                  <option value="pendente" ${order.status === 'pendente' ? 'selected' : ''}>Pendente</option>
-                  <option value="concluido" ${order.status === 'concluido' ? 'selected' : ''}>Concluído</option>
-                </select>
-              </td>
-              <td class="p-3">
-                <button class="print-button bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700" data-id="${docSnap.id}">Imprimir</button>
-              </td>
-            `;
-            ordersTable.appendChild(row);
+            try {
+              await signInWithEmailAndPassword(auth, email, password);
+              errorMessage.classList.add("hidden");
+            } catch (error) {
+              errorMessage.textContent = "Email ou senha inválidos!";
+              errorMessage.classList.remove("hidden");
+            }
           });
 
-          document.querySelectorAll('.status-select').forEach(select => {
-            select.addEventListener('change', async (e) => {
-              const orderId = e.target.dataset.id;
-              const newStatus = e.target.value;
-              await updateDoc(doc(db, 'orders', orderId), { status: newStatus });
-            });
+        document
+          .getElementById("logout-button")
+          .addEventListener("click", async () => {
+            await signOut(auth);
           });
 
-          document.querySelectorAll('.print-button').forEach(button => {
-            button.addEventListener('click', async (e) => {
-              const orderId = e.target.dataset.id;
-              const docSnap = await getDoc(doc(db, 'orders', orderId));
-              if (!docSnap.exists()) return;
+        document
+          .getElementById("status-filter")
+          .addEventListener("change", loadOrders);
 
-              const order = docSnap.data();
+async function loadOrders() {
+  // Limpar contadores antes de recarregar
+  let cardOrders = 0;
+  let cardTotal = 0;
+  let cashOrders = 0;
+  let cashTotal = 0;
+  let pixOrders = 0;
+  let pixTotal = 0;
 
-              const htmlContent = `
-                <html>
-                <head>
-                  <title>Pedido - Hamburgueria La Brasa</title>
-                  <style>
-                    body { font-family: sans-serif; padding: 20px; color: #000; }
-                    h2 { font-size: 24px; margin-bottom: 10px; }
-                    p, li { font-size: 16px; }
-                    ul { margin-top: 10px; padding-left: 20px; }
-                  </style>
-                </head>
-                <body>
-                  <h2>Hamburgueria La Brasa - Pedido</h2>
-                  <p><strong>Data:</strong> ${new Date(order.createdAt.toDate()).toLocaleString()}</p>
-                  <p><strong>Nome:</strong> ${order.name}</p>
-                  <p><strong>Telefone:</strong> ${order.phone}</p>
-                  <p><strong>Endereço:</strong> ${order.address}</p>
-                  <p><strong>Pagamento:</strong> ${order.paymentMethod}</p>
-                  <p><strong>Troco:</strong> ${order.changeNeeded || 'Não'}</p>
-                  <h3>Itens</h3>
-                  <ul>
-                    ${order.items.map(item => `
-                      <li>${item.nome} x${item.quantidade} - R$ ${item.subtotal.toFixed(2)}</li>
-                    `).join('')}
-                  </ul>
-                  <p><strong>Total:</strong> R$ ${order.total?.toFixed(2) || '0,00'}</p>
-                </body>
-                </html>
-              `;
+  try {
+    const statusFilter = document.getElementById("status-filter").value;
+    let q = query(
+      collection(db, "orders"),
+      orderBy("createdAt", "desc")
+    );
 
-              const printWindow = window.open('', '', 'width=800,height=600');
-              printWindow.document.write(htmlContent);
-              printWindow.document.close();
-              printWindow.focus();
-              printWindow.print();
-              printWindow.close();
-            });
-          });
-        } catch (error) {
-          console.error('Erro ao carregar pedidos:', error);
-        }
-      }
-    } catch (error) {
-      console.error('Erro ao inicializar Firebase:', error);
+    if (statusFilter !== "todos") {
+      q = query(
+        collection(db, "orders"),
+        where("status", "==", statusFilter),
+        orderBy("createdAt", "desc")
+      );
     }
-  </script>
-</body>
+
+    const snapshot = await getDocs(q);
+    const ordersGrid = document.getElementById("orders-grid");
+    ordersGrid.innerHTML = ""; // Limpa o grid de pedidos
+
+    snapshot.forEach((docSnap) => {
+      const order = docSnap.data();
+
+      // Debug: Verificar os dados do pedido
+      console.log(`Pedido ID: ${docSnap.id}`, order);
+
+      // Verifica se a forma de pagamento existe e atualiza a contagem
+      const paymentMethod = (order.paymentMethod || "").toLowerCase(); // Converte para minúsculas para garantir a correspondência
+
+      if (paymentMethod === "cartão") {
+        cardOrders++;
+        cardTotal += order.total || 0;
+      } else if (paymentMethod === "dinheiro") {
+        cashOrders++;
+        cashTotal += order.total || 0;
+      } else if (paymentMethod === "pix") {
+        pixOrders++;
+        pixTotal += order.total || 0;
+      }
+
+      // Criação do card para exibir o pedido
+      const card = document.createElement("div");
+      card.className = "bg-gray-800 p-4 rounded shadow space-y-2";
+
+      card.innerHTML = `
+        <div class="flex justify-between items-center">
+          <h4 class="font-bold text-lg">${order.name}</h4>
+          <span class="text-sm text-gray-400">${new Date(order.createdAt.toDate()).toLocaleString()}</span>
+        </div>
+        <p><strong>Telefone:</strong> ${order.phone}</p>
+        <p><strong>Endereço:</strong> ${order.address || "Não informado"}</p>
+        <p><strong>Pagamento:</strong> ${paymentMethod || "Não informado"}</p>
+        <p><strong>Troco:</strong> ${order.changeNeeded || "Não"}</p>
+        <div>
+          <h5 class="font-semibold mb-1">Itens:</h5>
+          <ul class="list-disc pl-5 text-sm">
+            ${order.items
+              .map(
+                (item) =>
+                  `<li>${item.nome} x${item.quantidade} - R$ ${item.subtotal.toFixed(2)}</li>`
+              )
+              .join("")}
+          </ul>
+        </div>
+        <p class="font-bold text-right">Total: R$ ${order.total?.toFixed(2) || "0,00"}</p>
+        <div class="flex justify-between items-center mt-3">
+          ${
+            order.status === "pendente"
+              ? `<button class="conclude-button bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm" data-id="${docSnap.id}">Concluir</button>`
+              : `<span class="text-green-500 font-semibold text-sm">Concluído</span>`
+          }
+        </div>
+      `;
+
+      ordersGrid.appendChild(card);
+    });
+
+    // Debug: Verificar as contagens
+    console.log("Contagem Cartão: ", cardOrders, " Total: R$", cardTotal);
+    console.log("Contagem Dinheiro: ", cashOrders, " Total: R$", cashTotal);
+    console.log("Contagem Pix: ", pixOrders, " Total: R$", pixTotal);
+
+    // Atualizando os totais na interface
+    document.getElementById("cardOrders").textContent = cardOrders;
+    document.getElementById("cardTotal").textContent = cardTotal.toFixed(2);
+
+    document.getElementById("cashOrders").textContent = cashOrders;
+    document.getElementById("cashTotal").textContent = cashTotal.toFixed(2);
+
+    document.getElementById("pixOrders").textContent = pixOrders;
+    document.getElementById("pixTotal").textContent = pixTotal.toFixed(2);
+
+    // Adicionando evento de clique para o botão "Concluir"
+    document.querySelectorAll(".conclude-button").forEach((button) => {
+      button.addEventListener("click", async (e) => {
+        const orderId = e.target.dataset.id;
+        await updateDoc(doc(db, "orders", orderId), {
+          status: "concluido",
+        });
+        loadOrders(); // recarrega a lista para atualizar o card
+      });
+    });
+  } catch (error) {
+    console.error("Erro ao carregar pedidos:", error);
+  }
+}
+
+      } catch (error) {
+        console.error("Erro no Firebase:", error);
+      }
+    </script>
+  </body>
 </html>
